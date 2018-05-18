@@ -7,3 +7,13 @@ _output/
 # python byte code
 *.pyc
 
+#generated certs
+hack/elasticsearch.yml
+hack/ssl/root-ca.p12
+hack/ssl/truststore
+hack/ssl/ca/*
+hack/ssl/es-logging/*
+hack/ssl/es-ops/*
+hack/ssl/fluentd-elasticsearch/*
+hack/ssl/kibana-ops/*
+hack/ssl/kibana/*

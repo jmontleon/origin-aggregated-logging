@@ -1,34 +1,21 @@
 #! /bin/bash
 
-# clean up old secrets
-echo "Cleaning up existing secrets"
-oc delete secret fluentd
-oc delete secret elasticsearch
-oc delete secret kibana
-oc delete secret elasticsearch-ops
-oc delete secret kibana-ops
+# create elasticsearch cert secret
+oc create secret generic elasticsearch --from-file=$PWD/es-logging/key --from-file=$PWD/truststore
 
-echo "Creating secrets..."
-# create secret for fluentd
-oc secrets new fluentd cert=$PWD/fluentd-elasticsearch/fluentd-elasticsearch.crt key=$PWD/fluentd-elasticsearch/fluentd-elasticsearch.key ca=$PWD/fluentd-elasticsearch/root-ca.crt
+# create elasticsearch config secret
+oc create secret generic elasticsearch-config --from-file=$PWD/../elasticsearch.yml
 
-# create secret for ES
-oc secrets new elasticsearch key=$PWD/es-logging/es-logging-keystore.jks truststore=$PWD/es-logging/truststore.jks searchguard.key=$PWD/es-logging/searchguard_node_key.key
+# create elasticsearch ops cert secret
+oc create secret generic elasticsearch-ops --from-file=$PWD/es-ops/key --from-file=$PWD/truststore
 
-# create secret for kibana
-oc secrets new kibana cert=$PWD/kibana/kibana.crt key=$PWD/kibana/kibana.key ca=$PWD/kibana/root-ca.crt
+# create fluentd cert secret
+oc create secret generic fluentd --from-file=$PWD/fluentd-elasticsearch/cert --from-file=$PWD/fluentd-elasticsearch/key --from-file=$PWD/ca/ca
 
-# create secret for ES-ops
-oc secrets new elasticsearch-ops key=$PWD/es-ops/es-ops-keystore.jks truststore=$PWD/es-ops/truststore.jks searchguard.key=$PWD/es-ops/searchguard_node_key.key
+# create kibana cert secret
+oc create secret generic kibana --from-file=$PWD/kibana/cert --from-file=$PWD/kibana/key --from-file=$PWD/ca/ca
 
-# create secret for kibana-ops
-oc secrets new kibana-ops cert=$PWD/kibana-ops/kibana-ops.crt key=$PWD/kibana-ops/kibana-ops.key ca=$PWD/kibana-ops/root-ca.crt
+# create kibana ops cert secret
+oc create secret generic kibana-ops --from-file=$PWD/kibana-ops/cert --from-file=$PWD/kibana-ops/key --from-file=$PWD/ca/ca
 
-echo "Assigning secrets to default"
-# assign secrets to default for mount
-oc secrets add serviceaccount/default secrets/fluentd --for=mount
-oc secrets add serviceaccount/default secrets/elasticsearch --for=mount
-oc secrets add serviceaccount/default secrets/kibana --for=mount
 
-oc secrets add serviceaccount/default secrets/elasticsearch-ops --for=mount
-oc secrets add serviceaccount/default secrets/kibana-ops --for=mount

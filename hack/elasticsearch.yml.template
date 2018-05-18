@@ -1,0 +1,64 @@
+searchguard.ssl.transport.http.enabled: true
+
+cluster:
+  name: elasticsearch
+
+discovery:
+  zen:
+    ping:
+      multicast:
+        enabled: false
+gateway:
+
+cloud:
+  k8s:
+    servicedns: es-viaq-cluster
+
+path:
+  data: /elasticsearch/persistent/elasticsearch/data
+  logs: /elasticsearch/logs
+  work: /elasticsearch/work
+
+openshift.searchguard.keystore.path: /etc/elasticsearch/keys/key
+openshift.searchguard.truststore.path: /etc/elasticsearch/keys/truststore
+openshift.searchguard.keystore.password: KSPASS
+openshift.searchguard.truststore.password: TSPASS
+io.fabric8.elasticsearch.kibana.mapping.app: /usr/share/elasticsearch/index_patterns/com.redhat.viaq-openshift.index-pattern.json
+io.fabric8.elasticsearch.kibana.mapping.ops: /usr/share/elasticsearch/index_patterns/com.redhat.viaq-openshift.index-pattern.json
+io.fabric8.elasticsearch.kibana.mapping.empty: /usr/share/elasticsearch/index_patterns/com.redhat.viaq-openshift.index-pattern.json
+
+searchguard:
+  key_path: /elasticsearch/elasticsearch
+  config_index_name: ".searchguard.elasticsearch"
+  allow_all_from_loopback: false
+  authentication:
+    authentication_backend:
+      impl: com.floragunn.searchguard.authentication.backend.simple.AlwaysSucceedAuthenticationBackend
+    authorizer:
+      impl: com.floragunn.searchguard.authorization.simple.SettingsBasedAuthorizator
+    http_authenticator:
+      impl: io.fabric8.elasticsearch.plugin.HTTPSProxyClientCertAuthenticator
+    proxy:
+      header: X-Proxy-Remote-User
+      trusted_ips: ["*"]
+    authorization:
+      settingsdb:
+        roles:
+          admin: ["root"]
+          fluentd: ["fluentd"]
+  ssl:
+    transport:
+      keystore_type: JKS
+      keystore_filepath: keys/key
+      keystore_password: KSPASS
+      enforce_clientauth: true
+      truststore_type: JKS
+      truststore_filepath: keys/truststore
+      truststore_password: TSPASS
+  actionrequestfilter:
+    names: ["readonly", "fluentd" ]
+    readonly:
+      allowed_actions: ["indices:data/read/*", "*monitor*"]
+      forbidden_actions: ["cluster:*", "indices:admin*"]
+    fluentd:
+      allowed_actions: ["indices:data/write/*", "indices:admin/create"]

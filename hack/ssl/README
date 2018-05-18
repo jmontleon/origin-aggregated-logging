@@ -1,0 +1,7 @@
+createAll.sh is your fastest path to creating all certs and secrets.
+
+./createAll.sh ca_password truststore_password keystore_password
+
+If you care to step through the process you can run the scripts individually as well.
+
+cleanAll.sh will remove all generated files.

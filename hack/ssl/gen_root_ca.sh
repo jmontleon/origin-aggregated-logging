@@ -64,13 +64,15 @@ echo Signing CA generated
 "$JAVA_HOME/bin/keytool"  \
     -import  \
     -file ca/root-ca.crt  \
-    -keystore truststore.jks   \
+    -keystore truststore   \
     -storepass $TS_PASS  \
     -noprompt -alias root-ca
 
 "$JAVA_HOME/bin/keytool"  \
     -import \
     -file ca/signing-ca.crt  \
-    -keystore truststore.jks   \
+    -keystore truststore   \
     -storepass $TS_PASS  \
     -noprompt -alias sig-ca
+
+cp ca/root-ca.crt ca/ca

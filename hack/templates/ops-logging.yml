@@ -95,7 +95,7 @@ items:
             -
               name: "CLUSTER_NAME"
               value: "operations"
-            image: "openshift/elasticsearch:v1"
+            image: openshift/origin-logging-elasticsearch:v1.5.0
             name: "elasticsearch-ops"
             ports:
             -
@@ -146,7 +146,7 @@ items:
             -
               name: "CLUSTER_NAME"
               value: "elasticsearch"
-            image: "openshift/elasticsearch:v1"
+            image: openshift/origin-logging-elasticsearch:v1.5.0
             name: "elasticsearch"
             ports:
             -
@@ -180,7 +180,7 @@ items:
   spec:
     containers:
     - name: fluentd-elasticsearch
-      image: openshift/fluentd:v1
+      image: openshift/origin-logging-fluentd:latest
       securityContext:
         privileged: true
       resources:
@@ -260,7 +260,7 @@ items:
         containers:
           -
             name: "kibana-ops"
-            image: "openshift/kibana:v1"
+            image: openshift/origin-logging-kibana:latest
             ports:
               -
                 name: "kibana-port"
@@ -310,7 +310,7 @@ items:
         containers:
           -
             name: "kibana"
-            image: "openshift/kibana:v1"
+            image: openshift/origin-logging-kibana:latest
             ports:
               -
                 name: "kibana-port"

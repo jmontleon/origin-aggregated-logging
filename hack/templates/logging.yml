@@ -62,7 +62,12 @@ items:
             -
               name: "CLUSTER_NAME"
               value: "elasticsearch"
-            image: "openshift/elasticsearch:v1"
+            image: openshift/origin-logging-elasticsearch:v1.5.0
+            cmd:
+            - "/usr/share/elasticsearch/bin/elasticsearch"
+            args:
+            - "--path.conf=/etc/elasticsearch"
+            - "--security.manager.enabled=false"
             name: "elasticsearch"
             ports:
             -
@@ -73,8 +78,16 @@ items:
               name: "transport"
             volumeMounts:
               - name: certs
-                mountPath: /etc/elasticsearch/keys
+                mountPath: /etc/elasticsearch/keys/key
+                subPath: key
                 readOnly: true
+              - name: certs
+                mountPath: /etc/elasticsearch/keys/truststore
+                subPath: truststore
+                readOnly: true
+              - name: config
+                mountPath: /etc/elasticsearch/elasticsearch.yml
+                subPath: elasticsearch.yml
               - name: pvc
                 mountPath: /elasticsearch/persistent
                 readOnly: false
@@ -82,6 +95,11 @@ items:
           - name: certs
             secret:
               secretName: elasticsearch
+              defaultMode: 444
+          - name: config
+            secret:
+              secretName: elasticsearch-config
+              defaultMode: 444
           - name: pvc
             persistentVolumeClaim:
               claimName: pvc-001
@@ -97,7 +115,7 @@ items:
   spec:
     containers:
     - name: fluentd-elasticsearch
-      image: openshift/fluentd:v1
+      image: openshift/origin-logging-fluentd:latest
       securityContext:
         privileged: true
       resources:
@@ -177,7 +195,7 @@ items:
         containers:
           -
             name: "kibana"
-            image: "openshift/kibana:v1"
+            image: openshift/origin-logging-kibana:latest
             ports:
               -
                 name: "kibana-port"

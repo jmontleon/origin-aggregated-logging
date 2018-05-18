@@ -8,13 +8,13 @@ mkdir $NODE_NAME
 
 echo Generating keystore and certificate for node $NODE_NAME
 
-openssl req -out $NODE_NAME/$NODE_NAME.csr -new -newkey rsa:2048 -keyout $NODE_NAME/$NODE_NAME.key -subj '/CN=$NODE_NAME/OU=SSL/O=Test/L=Test/C=DE' -days 712 -nodes
+openssl req -out $NODE_NAME/$NODE_NAME.csr -new -newkey rsa:2048 -keyout $NODE_NAME/key -subj '/CN=$NODE_NAME/OU=SSL/O=Test/L=Test/C=DE' -days 712 -nodes
 
 echo Sign certificate request with CA
 openssl ca \
     -in $NODE_NAME/$NODE_NAME.csr \
     -notext \
-    -out $NODE_NAME/$NODE_NAME.crt \
+    -out $NODE_NAME/cert \
     -config etc/signing-ca.conf \
     -extensions v3_req \
     -batch \
