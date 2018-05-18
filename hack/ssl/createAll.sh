@@ -17,7 +17,6 @@ echo "generating jks certs"
 for i in es-logging es-ops ; do ./generateJKSChain.sh $i $KS_PASS $CA_PASS ; done
 
 echo "generating elasticsearch config" 
-sed -i "s/KSPASS/$KS_PASS/g" ../elasticsearch.yml.template > ../elasticsearch.yml
-sed -i "s/TSPASS/$TS_PASS/g" ../elasticsearch.yml.template > ../elasticsearch.yml
+sed -e "s/KSPASS/$KS_PASS/g" -e "s/TSPASS/$TS_PASS/g" ../elasticsearch.yml.template > ../elasticsearch.yml
 
 ./createSecrets.sh
