@@ -63,7 +63,7 @@ items:
               name: "CLUSTER_NAME"
               value: "elasticsearch"
             image: openshift/origin-logging-elasticsearch:v1.5.0
-            cmd:
+            command:
             - "/usr/share/elasticsearch/bin/elasticsearch"
             args:
             - "--path.conf=/etc/elasticsearch"

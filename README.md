@@ -4,6 +4,16 @@
 * Test Pull Request - master/journald - [![Test Pull Request - master/journald](https://ci.openshift.redhat.com/jenkins/buildStatus/icon?job=test_pull_request_openshift_ansible_logging)](https://ci.openshift.redhat.com/jenkins/view/All/job/test_pull_request_openshift_ansible_logging/)
 * Test Pull Request - master/json-file - [![Test Pull Request - master/json-file](https://ci.openshift.redhat.com/jenkins/buildStatus/icon?job=test_pull_request_origin_aggregated_logging_json_file)](https://ci.openshift.redhat.com/jenkins/view/All/job/test_pull_request_origin_aggregated_logging_json_file/)
 
+## Use
+cd hack/ssl
+./createAll.sh ca_password truststore_password keystore_password
+cd ../templates/
+oc create -f pvc.yml
+oc create -f logging.yml
+
+Nothing works yet...
+
+##Introduction
 This repo contains the image definitions for the components of the logging
 stack as well as tools for building and deploying them.  The logging subsystem
 consists of multiple [components](#Components) abbreviated as the "EFK"
